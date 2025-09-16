@@ -1,0 +1,46 @@
+before:
+  hooks:
+    - go mod download
+archives:
+  - id: inwx-exporter
+builds:
+  - id: inwx-exporter
+    ldflags: -s -w -X 'main.version={{.Version}}'
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - freebsd
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "6"
+      - "7"
+nfpms:
+    - vendor: ServiceERP
+      homepage: https://github.com/serviceerp/inwx-exporter
+      maintainer: ServiceERP GmbH <info@service-erp.de>
+      description: |-
+        Prometheus Exporter for INWX
+      license: Apache 2.0
+      formats:
+          - deb
+          - rpm
+release:
+  github:
+    owner: serviceerp
+    name: inwx-exporter
+  name_template: "Release v{{.Version}}"
+  prerelease: auto
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
